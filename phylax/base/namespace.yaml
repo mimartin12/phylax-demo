@@ -1,0 +1,6 @@
+# Default namespace for Phylax
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: phylax

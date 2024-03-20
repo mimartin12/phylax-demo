@@ -1,0 +1,13 @@
+# Kubernetes service to expose the Phylax service
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: phylax
+spec:
+  selector:
+    kubernetes.io/name: phylax
+  ports:
+  - protocol: TCP
+    port: 4269
+    name: http

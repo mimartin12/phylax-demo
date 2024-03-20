@@ -1,0 +1,72 @@
+# Kubernetes deployment that deploys the Phylax container.
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: phylax
+  labels:
+    kubernetes.io/name: phylax
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      kubernetes.io/name: phylax
+  template:
+    metadata:
+      labels:
+        kubernetes.io/name: phylax
+    spec:
+      containers:
+        - name: phylax
+          image: ghcr.io/phylax-systems/phylax:latest
+          command: ["phylax"]
+          args:
+            [
+              "node",
+              "--enable-api",
+              "--config.file=/etc/opt/phylax/phylax.yaml",
+            ]
+          resources:
+            requests:
+              cpu: 100m
+              memory: 256Mi
+            limits:
+              cpu: 500m
+              memory: 512Mi
+          envFrom: []
+          ports:
+            - containerPort: 4269
+              name: http
+              protocol: TCP
+          livenessProbe:
+            httpGet:
+              path: /
+              port: http
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          readinessProbe:
+            httpGet:
+              path: /
+              port: http
+            initialDelaySeconds: 5
+            periodSeconds: 10
+            failureThreshold: 3
+          volumeMounts:
+            - name: phylax-config
+              mountPath: /etc/opt/phylax/phylax.yaml
+              subPath: phylax.yaml
+            - name: alerts
+              mountPath: /etc/opt/phylax/alerts
+            - name: logs
+              mountPath: /etc/opt/phylax/testdata/logs
+      volumes:
+        - name: phylax-config
+          configMap:
+            name: phylax-config
+            items:
+              - key: phylax.yaml
+                path: phylax.yaml
+        - name: alerts
+          emptyDir: {}
+        - name: logs
+          emptyDir: {}

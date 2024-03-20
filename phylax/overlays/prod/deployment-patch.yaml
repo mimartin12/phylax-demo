@@ -1,0 +1,6 @@
+# Patch deployment to use the phylax-env ConfigMap as environment variables.
+- op: add
+  path: /spec/template/spec/containers/0/envFrom/-
+  value:
+    configMapRef:
+      name: phylax-env

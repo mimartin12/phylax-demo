@@ -1,0 +1,13 @@
+# Network policy to only allow traffic to pods from Nginx Ingress
+---
+apiVersion: "cilium.io/v2"
+kind: CiliumNetworkPolicy
+metadata:
+  name: "allow-nginx-ingress"
+specs:
+  - endpointSelector:
+      matchLabels: {}
+    ingress:
+      - fromEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: ingress-nginx

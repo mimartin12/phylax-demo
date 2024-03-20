@@ -1,0 +1,8 @@
+tracing:
+  logLevel: trace
+  logsDir: /etc/opt/phylax/testdata/logs
+api:
+  bindIp: 0.0.0.0:4269
+alerts: []
+watchers: []
+actions: []
